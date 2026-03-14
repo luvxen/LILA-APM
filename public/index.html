@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>LILA APM - Match Visualizer (v3)</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  
+  <div id="sidebar">
+    <div class="header">
+      <h1>LILA APM</h1>
+      <span>Player Journey Visualizer</span>
+    </div>
+
+    <!-- 1: Data Pipeline -->
+    <div class="control-card">
+      <h3>Data Pipeline</h3>
+      <input type="file" id="parquet-upload" multiple accept=".parquet,.nakama-0">
+      <button id="upload-btn" class="btn primary">Upload & Parse to DB</button>
+      <div id="upload-status">No database loaded. Upload Parquet files to begin.</div>
+    </div>
+
+    <!-- 2: Global Selectors -->
+    <div class="control-card">
+        <h3>Match Selectors</h3>
+        
+        <div class="selector-row">
+            <label>Map</label>
+            <select id="map-select"><option value="none">Waiting for DB...</option></select>
+        </div>
+        <div class="selector-row">
+            <label>Date</label>
+            <select id="date-select"><option value="all">All Dates</option></select>
+        </div>
+        <div class="selector-row">
+            <label>Participant</label>
+            <select id="user-select"><option value="all">All Users</option></select>
+        </div>
+        <div class="selector-row">
+            <label>Match</label>
+            <select id="match-select"><option value="all">All Matches</option></select>
+        </div>
+        
+        <button id="apply-selectors" class="btn primary w-full">Load Context</button>
+    </div>
+
+    <!-- 3: Relative Time Filtering -->
+    <div class="control-card time-panel">
+        <h3>Relative Time Filter</h3>
+        <p class="desc">Slice the match from its exact start time.</p>
+        
+        <div class="time-inputs">
+            <input type="number" id="time-rel-start" placeholder="Min" min="0" step="1">
+            <span>to</span>
+            <input type="number" id="time-rel-end" placeholder="Min" min="0" step="1">
+        </div>
+        <button id="apply-time-relative" class="btn secondary w-full">Filter Time Slice</button>
+    </div>
+
+    <!-- 4: Visual Toggles (Bots vs Humans) -->
+    <div class="control-card">
+        <h3>Visual Toggles</h3>
+
+        <div class="toggle-group paths-toggles">
+            <h4>Paths</h4>
+            <label><input type="checkbox" id="chk-human-paths" checked> <div class="swatch human"></div> Human Paths</label>
+            <label><input type="checkbox" id="chk-bot-paths" checked> <div class="swatch bot"></div> Bot Paths</label>
+        </div>
+
+        <div class="toggle-group heatmap-toggles">
+            <h4>Heatmaps</h4>
+            <label><input type="checkbox" id="chk-heat-human-path"> Human Traffic Heat</label>
+            <label><input type="checkbox" id="chk-heat-bot-path"> Bot Traffic Heat</label>
+            
+            <label><input type="checkbox" id="chk-heat-human-kill"> Human Heat (Kill Zones)</label>
+            <label><input type="checkbox" id="chk-heat-bot-kill"> Bot Heat (Kill Zones)</label>
+            
+            <label><input type="checkbox" id="chk-heat-human-death"> Human Heat (Death Zones)</label>
+            <label><input type="checkbox" id="chk-heat-bot-death"> Bot Heat (Death Zones)</label>
+        </div>
+
+        <div class="toggle-group events-toggles">
+            <h4>Events</h4>
+            <label><input type="checkbox" id="chk-ev-human-kill" checked> Human Kills</label>
+            <label><input type="checkbox" id="chk-ev-bot-kill" checked> Bot Kills</label>
+            <hr>
+            <label><input type="checkbox" id="chk-ev-human-death" checked> Human Deaths</label>
+            <label><input type="checkbox" id="chk-ev-human-storm" checked> Human Storm Deaths</label>
+            <hr>
+            <label><input type="checkbox" id="chk-ev-bot-death" checked> Bot Deaths</label>
+            <label><input type="checkbox" id="chk-ev-bot-storm" checked> Bot Storm Deaths</label>
+            <hr>
+            <label><input type="checkbox" id="chk-ev-loot" checked> Loot Spawns</label>
+        </div>
+    </div>
+  </div>
+
+  <div id="main-view">
+    <div id="canvas-wrapper">
+        <canvas id="minimap" width="1024" height="1024"></canvas>
+    </div>
+    
+    <!-- Timeline Scrubber Engine -->
+    <div id="timeline">
+        <div class="scrub-controls">
+            <button id="btn-play" class="btn primary" disabled>Play</button>
+            <span id="time-current">0:00</span>
+        </div>
+        
+        <div id="scrub-track-wrapper">
+            <!-- This wrapper captures clicks when the scrubber is disabled for UI feedback -->
+            <input type="range" id="scrubber" min="0" max="0" value="0" disabled>
+        </div>
+        
+        <div class="scrub-stats">
+            <span id="time-total">0:00</span>
+            <span id="event-counter">0 events mapped</span>
+        </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

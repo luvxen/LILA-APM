@@ -1,0 +1,16 @@
+<canvas id="c" width="1024" height="1024"></canvas>
+<script>
+const STATE = {};
+const MINIMAP_CONFIG = {
+    Lockdown:      { file: 'minimaps/t1_v80.png',           scale: 236.4, ox: -121045, oz: -121045 },
+    AmbroseValley: { file: 'minimaps/t2_p01_v38.png',        scale: 474.0, ox: -242700, oz: -242700 },
+    GrandRift:     { file: 'minimaps/t2_p04_v25_light.png', scale: 474.0, ox: -242700, oz: -242700 }
+};
+const ev = ["1409", false, "BotPosition", 230.90101623535156, 15.441590309143066, 1771070041000];
+const c = MINIMAP_CONFIG['GrandRift'];
+const pt = {
+    px: ((ev[3] - c.ox) / c.scale) * 1024,
+    py: (1 - ((ev[4] - c.oz) / c.scale)) * 1024
+};
+console.log("Calculated pt:", pt);
+</script>
